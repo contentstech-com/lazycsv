@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1742879590094,
+  "lastUpdate": 1742901766316,
   "repoUrl": "https://github.com/contentstech-com/lazycsv",
   "entries": {
     "Rust Benchmark": [
@@ -265,6 +265,60 @@ window.BENCHMARK_DATA = {
             "name": "Parsers/csv",
             "value": 282483761,
             "range": "± 2576045",
+            "unit": "ns/iter"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "simnalamburt@gmail.com",
+            "name": "Jihyeon Kim",
+            "username": "simnalamburt"
+          },
+          "committer": {
+            "email": "simnalamburt@gmail.com",
+            "name": "Jihyeon Kim",
+            "username": "simnalamburt"
+          },
+          "distinct": false,
+          "id": "11c0b83dd0672c8a4d8744217bd2b8da669e3863",
+          "message": ".github: CI no_std",
+          "timestamp": "2025-03-25T20:19:50+09:00",
+          "tree_id": "87769c0d809b3da8b7dff463ef557758cd416b9d",
+          "url": "https://github.com/contentstech-com/lazycsv/commit/11c0b83dd0672c8a4d8744217bd2b8da669e3863"
+        },
+        "date": 1742901765969,
+        "tool": "cargo",
+        "benches": [
+          {
+            "name": "Parsers/lazy_csv",
+            "value": 246611227,
+            "range": "± 1756790",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "Parsers/lazy_csv (into_rows)",
+            "value": 257751106,
+            "range": "± 1950934",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "Parsers/lazy_csv (raw)",
+            "value": 161669431,
+            "range": "± 324384",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "Parsers/lazy_csv (into_rows, raw)",
+            "value": 161359935,
+            "range": "± 176562",
+            "unit": "ns/iter"
+          },
+          {
+            "name": "Parsers/csv",
+            "value": 282126281,
+            "range": "± 1059396",
             "unit": "ns/iter"
           }
         ]
