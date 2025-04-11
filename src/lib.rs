@@ -269,7 +269,6 @@ impl<'a> Iterator for Csv<'a> {
         };
 
         let mut cursor = start;
-        let mut padding = 0;
         let mut in_quoted_state = false;
 
         loop {
@@ -298,16 +297,14 @@ impl<'a> Iterator for Csv<'a> {
             if c == b'"' {
                 in_quoted_state = true;
                 cursor = index + 1;
-                padding = 1;
                 continue;
             }
 
             // SAFETY: `index - 1` is checked to be within the bounds of `self.buf`.
             let is_crlf =
                 c == b'\n' && index != 0 && unsafe { *self.buf.get_unchecked(index - 1) } == b'\r';
-            let padding_end = padding + (is_crlf as usize);
             let cell = Cell {
-                buf: &self.buf[(start + padding)..(index - padding_end)],
+                buf: &self.buf[start..(index - (is_crlf as usize))],
             };
             self.state = if c == b'\n' {
                 IterState::LineEnd(index)
@@ -421,11 +418,15 @@ impl<'a> Cell<'a> {
     /// Converts the cell to a string.
     ///
     /// Calling this function performs a UTF-8 validation and dequotes the cell if necessary.
+    ///
+    /// Since dequoting is very inefficient in `lazycsv` compared to other crates like `csv`,
+    /// it is advised to either access the underlying buffer directly
+    /// or use `try_as_str` only with inputs that have little amount of quotes.
     pub fn try_as_str(&self) -> Result<Cow<'a, str>, core::str::Utf8Error> {
         core::str::from_utf8(self.buf).map(|s| {
             // SAFETY: since `s.as_bytes()` is guaranteed to be valid UTF-8, it's also guaranteed that the first character is '"' if the first byte is b'"' due to UTF-8 representing ASCII characters as-is.
             if !s.is_empty() && unsafe { *s.as_bytes().get_unchecked(0) } == b'"' {
-                Cow::Owned(s.replace("\"\"", "\""))
+                Cow::Owned(s[1..(s.len() - 1)].replace("\"\"", "\""))
             } else {
                 Cow::Borrowed(s)
             }
